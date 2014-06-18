@@ -1,0 +1,34 @@
+<h1>Twój wniosek</h1>
+
+<table class="table">
+	<tr>
+		<th>Użytkownik:</th>
+		<td><%= @order.user.email %></td>
+	</tr>
+	<tr>
+		<th>Status:</th>
+		<td><%= @order.status %></td>
+	</tr>
+	<tr>
+		<th>Ilość ról:</th>
+		<td><%= @order.order_items.count %></td>
+	</tr>
+
+	<tr>
+		<th>Numer roli</th>
+		<th>Nazwa</th>
+		<th>Opis</th>
+	</tr>
+	<% @order.order_items.each do |item| %>
+		<tr>	
+			<td><%= item.role.nr_roli %></td>
+			<td><%= item.role.nazwa %></td>
+			<td><%= item.role.opis %></td>
+			<td><%= link_to 'Usun role z wniosku', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+		</tr>
+	<% end %>
+</table>
+<%= link_to "Usuń wniosek", @order, data: { confirm: 'Are you sure?' }, method: :delete %>
+
+<%= link_to 'Zatwierdz do realizacji', zatwierdz_order_path, method: :patch %> |
+<%= link_to 'Back', root_path %>
