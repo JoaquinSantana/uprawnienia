@@ -4,6 +4,11 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: {sessions: "sessions"}
 
+  concern :the_role, TheRole::AdminRoutes.new
+
+  namespace :admin do
+    concerns :the_role
+  end
 
 #, :controllers => { :sessions => 'users/sessions' }
   
@@ -16,9 +21,9 @@ Rails.application.routes.draw do
     end
   end
   resources :order_items, only: [:create, :edit, :update, :destroy]
-  resources :roles
+  resources :products
   resources :workers
 
-  root 'roles#index'
+  root 'products#index'
 
 end

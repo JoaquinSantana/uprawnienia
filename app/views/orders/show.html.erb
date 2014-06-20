@@ -21,9 +21,9 @@
 	</tr>
 	<% @order.order_items.each do |item| %>
 		<tr>	
-			<td><%= item.role.nr_roli %></td>
-			<td><%= item.role.nazwa %></td>
-			<td><%= item.role.opis %></td>
+			<td><%= item.product.nr_roli %></td>
+			<td><%= item.product.nazwa %></td>
+			<td><%= item.product.opis %></td>
 			<td><%= link_to 'Usun role z wniosku', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
 		</tr>
 	<% end %>

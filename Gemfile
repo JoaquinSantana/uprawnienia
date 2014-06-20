@@ -9,8 +9,9 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'twitter-bootstrap-rails'
 gem 'simple_form'
 gem 'devise'
-gem 'cancan'
-gem 'rolify'
+
+gem 'the_role_bootstrap3_ui'
+gem 'the_role', '~> 2.5.2'
 
 gem 'jquery-rails'
 gem 'turbolinks'

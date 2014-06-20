@@ -1,7 +1,9 @@
 class OrdersController < ApplicationController
-  before_action :set_order, only: [:show, :edit, :update, :destroy, :zatwierdz]
   before_action :authenticate_user!
+  before_action :role_required, except: [:show]
   before_action :find_ord, only: [:index]
+  before_action :set_order, only: [:show, :edit, :update, :destroy, :zatwierdz]
+  before_action :owner_required, only: [:show, :edit, :update, :destroy]
   # GET /orders
   # GET /orders.json
   def index
@@ -55,21 +57,29 @@ class OrdersController < ApplicationController
   # DELETE /orders/1
   # DELETE /orders/1.json
   def destroy
-    @order.destroy
-    respond_to do |format|
-      format.html { redirect_to root_url }
-      flash[:success] = "Wniosek został usunięty"
-      format.json { head :no_content }
+    if @order.niezatwierdzony?
+      @order.destroy
+      respond_to do |format|
+        format.html { redirect_to root_url }
+        flash[:success] = "Wniosek został usunięty"
+        format.json { head :no_content }
+      end
+    else
+      redirect_to @order
+      flash[:error] = "Na tym etapie nie możesz usunąć wniosku"
     end
   end
 
   def zatwierdz
-    if @order.akcept
+    if @order.order_items.empty?
+      redirect_to @order
+      flash[:error] = "Wniosek nie posiada ról"
+    elsif @order.akcept
       session[:order_id] = nil
       redirect_to @order
       flash[:success] = "Twój wniosek został przesłany do realizacji"
     else
-      flash[:error] = "Ten wniosek został już wysłany"
+      flash[:error] = "Wniosek został przesłany już do realizacji"
       redirect_to :back
     end
   end
@@ -78,6 +88,7 @@ class OrdersController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_order
       @order = Order.find(params[:id])
+      @owner_check_object = @order
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

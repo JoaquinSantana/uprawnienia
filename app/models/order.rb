@@ -8,6 +8,6 @@ class Order < ActiveRecord::Base
 
 
 	def akcept
-		self.wobiegu! if status == "niezatwierdzony"
+		self.wobiegu! if status == "niezatwierdzony" 
 	end
 end

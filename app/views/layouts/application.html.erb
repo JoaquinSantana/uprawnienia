@@ -20,6 +20,17 @@
   <body>
 
     <%= render 'layouts/nav' %>
+
+    <div class="container">
+      <div class="row">
+          <div class="span3">
+            <%= yield :role_sidebar %>
+          </div>
+          <div class="span9">
+            <%= yield :role_main %>
+          </div>     
+      </div>
+    </div>
       <div class="container">
           <div class="row">
             <div class="span9">
@@ -30,14 +41,14 @@
             </div>
             <div class="span3">
               <div class="well sidebar-nav">
-              <% if user_signed_in? && @order.order_items.present? %>
+              <% if user_signed_in? && @order && @order.order_items.present? %>
                 <h3>Wniosek</h3>
                 <ul class="nav nav-list wniosek">
                   Wnioskujesz o role
 
                     <% @order.order_items.each do |i| %>
                       <li>
-                        <%= i.role.nr_roli %>
+                        <%= i.product.nr_roli %>
                       </li>           
                     <% end %>
 
@@ -45,7 +56,7 @@
                 </ul>
               <% else %>
                 <h3>Dodaj rolę aby utworzyć wniosek</h3>
-                <p><%= link_to "Katalog", roles_path %></p>
+                <p><%= link_to "Katalog", products_path %></p>
               <% end %>
               </div><!--/.well -->
             </div><!--/span-->
