@@ -23,8 +23,12 @@
                 <li>
                   <%= link_to "Twoje wnioski", orders_path %>
                 </li>
+                <li>
+                  <%= link_to "Profil", edit_user_registration_path %>
+                </li>
                 <% if current_user.admin? %>
                   <li><%= link_to "Uprawnienia", admin_roles_path %></li>
+                  <li><%= link_to "Oddziały", branches_path %></li>
                   <li class="divider"></li>
                 <% end %>
                 <li>

@@ -1,9 +1,21 @@
+<%= form_for @order do |f| %>
 <h1>Twój wniosek</h1>
 
 <table class="table">
 	<tr>
-		<th>Użytkownik:</th>
+		<th>Wnioskujący:</th>
 		<td><%= @order.user.email %></td>
+	</tr>
+	<tr>
+		<th>Uprawnienia dla:</th>
+		<td>
+			<%= f.select :user_id, @prac %>
+		</td>
+		<!-- current_user.subordinates.collect{|a| [a.to_s, a.id]}  -->
+	</tr>
+	<tr>
+		<th>Nowy pracownik?</th>
+		<td><%= link_to "Dodaj pracownika", '#' %></td>
 	</tr>
 	<tr>
 		<th>Status:</th>
@@ -32,3 +44,4 @@
 
 <%= link_to 'Zatwierdz do realizacji', zatwierdz_order_path, method: :patch %> |
 <%= link_to 'Back', root_path %>
+<% end %>

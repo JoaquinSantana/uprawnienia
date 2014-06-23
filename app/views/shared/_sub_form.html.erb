@@ -1,0 +1,14 @@
+<%= form_for(@sub) do |f| %>
+
+<%= f.error_notification %>
+	  <div class="form-inputs">
+		  <%= f.input :email, required: true, autofocus: true %>
+			<%= f.input :password, required: true %>
+			<%= f.input :password_confirmation, required: true %>
+	  </div>
+	  <div class="form-actions">
+  		<%= f.submit "Post", class: "btn btn-large btn-primary" %>
+		</div>
+<% end %>
+
+  

@@ -13,6 +13,8 @@ class OrdersController < ApplicationController
   # GET /orders/1
   # GET /orders/1.json
   def show
+    @user = current_user
+    @prac = User.select{|x| x.branch == current_user.branch }
   end
 
   # GET /orders/new

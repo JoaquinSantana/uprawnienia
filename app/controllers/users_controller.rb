@@ -1,7 +1,5 @@
-class UsersController < Devise::ApplicationController
+class UsersController < Devise::SessionsController
 
-
-	def wnioski
-		
+	def show
 	end
 end

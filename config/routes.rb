@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
   
-  
-
   devise_for :users, controllers: {sessions: "sessions"}
 
   concern :the_role, TheRole::AdminRoutes.new
@@ -13,9 +11,9 @@ Rails.application.routes.draw do
 #, :controllers => { :sessions => 'users/sessions' }
   
   resources :orders do
-  	collection do
-  		get 'wnioski'
-  	end
+    collection do
+      get 'wnioski'
+    end
     member do
       patch 'zatwierdz'
     end
@@ -23,6 +21,7 @@ Rails.application.routes.draw do
   resources :order_items, only: [:create, :edit, :update, :destroy]
   resources :products
   resources :workers
+  resources :branches
 
   root 'products#index'
 
