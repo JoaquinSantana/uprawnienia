@@ -1,4 +1,3 @@
-<%= form_for @order do |f| %>
 <h1>Twój wniosek</h1>
 
 <table class="table">
@@ -6,12 +5,19 @@
 		<th>Wnioskujący:</th>
 		<td><%= @order.user.email %></td>
 	</tr>
+	
 	<tr>
 		<th>Uprawnienia dla:</th>
-		<td>
-			<%= f.select :user_id, @prac %>
-		</td>
-		<!-- current_user.subordinates.collect{|a| [a.to_s, a.id]}  -->
+		<% if @order.niezatwierdzony? %>
+			<%= form_for @order do |f| %>
+				<td>
+					<%= f.select :user_id, @prac %>
+				</td>
+			<!-- current_user.subordinates.collect{|a| [a.to_s, a.id]}  -->
+			<% end %>
+		<% else %>
+		<td><%= @order.user %></td>
+		<% end %>
 	</tr>
 	<tr>
 		<th>Nowy pracownik?</th>
@@ -44,4 +50,3 @@
 
 <%= link_to 'Zatwierdz do realizacji', zatwierdz_order_path, method: :patch %> |
 <%= link_to 'Back', root_path %>
-<% end %>

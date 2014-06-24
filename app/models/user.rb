@@ -1,10 +1,12 @@
 class User < ActiveRecord::Base
+  include TheRole::User
+  acts_as_tree order: "email"
+
+  
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
-
-  include TheRole::User
 
   has_many :subordinates, class_name: "User",
   		 foreign_key: "manager_id"

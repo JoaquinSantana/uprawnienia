@@ -9,6 +9,7 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'twitter-bootstrap-rails'
 gem 'simple_form'
 gem 'devise'
+gem 'acts_as_tree', '~>1.6.1'
 
 gem 'the_role_bootstrap3_ui'
 gem 'the_role', '~> 2.5.2'

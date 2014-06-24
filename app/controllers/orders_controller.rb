@@ -81,7 +81,7 @@ class OrdersController < ApplicationController
       redirect_to @order
       flash[:success] = "Twój wniosek został przesłany do realizacji"
     else
-      flash[:error] = "Wniosek został przesłany już do realizacji"
+      flash[:error] = "Wniosek jest w trakcie realizacji"
       redirect_to :back
     end
   end
