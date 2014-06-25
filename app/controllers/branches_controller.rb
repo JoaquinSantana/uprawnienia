@@ -11,6 +11,7 @@ class BranchesController < ApplicationController
   # GET /branches/1
   # GET /branches/1.json
   def show
+    @users = @branch.users
   end
 
   # GET /branches/new

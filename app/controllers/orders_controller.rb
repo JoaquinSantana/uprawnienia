@@ -1,9 +1,10 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
-  before_action :role_required, except: [:show]
+  before_action :role_required
   before_action :find_ord, only: [:index]
-  before_action :set_order, only: [:show, :edit, :update, :destroy, :zatwierdz]
-  before_action :owner_required, only: [:show, :edit, :update, :destroy]
+  before_action :set_order, only: [:show, :edit, :update, :destroy, :zatwierdz, :copy]
+  before_action :owner_required, only: [:show, :edit, :update, :destroy, :copy]
+  before_action :copy, only: [:update]
   # GET /orders
   # GET /orders.json
   def index
@@ -14,7 +15,7 @@ class OrdersController < ApplicationController
   # GET /orders/1.json
   def show
     @user = current_user
-    @prac = User.select{|x| x.branch == current_user.branch }
+    
   end
 
   # GET /orders/new
@@ -24,13 +25,13 @@ class OrdersController < ApplicationController
 
   # GET /orders/1/edit
   def edit
+    @prac = User.select{|x| x.branch == current_user.branch }
   end
 
   # POST /orders
   # POST /orders.json
   def create
     @order = current_user.orders.create(order_params)
-  
      respond_to do |format|
       if @order.save
         format.html { redirect_to @order, notice: 'Order was successfully created.' }
@@ -45,14 +46,10 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
   def update
-    respond_to do |format|
-      if @order.wobiegu!
-        format.html { redirect_to @order, notice: 'Order was successfully updated.' }
-        format.json { render :show, status: :ok, location: @order }
-      else
-        format.html { render :edit }
-        format.json { render json: @order.errors, status: :unprocessable_entity }
-      end
+    if @order.update_attributes(order_params)
+      redirect_to @order, notice: "Pracownicy zostali dodani do wnisoku"
+    else
+      render :edit
     end
   end
 
@@ -93,8 +90,17 @@ class OrdersController < ApplicationController
       @owner_check_object = @order
     end
 
+
+    def copy
+      params[:order][:contributor_ids].each do |c|
+        next if c == ''
+        user = User.find(c)
+        user.orders << @order
+      end
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
-      params.require(:order).permit(:status)
+      params.require(:order).permit(:status, :contributor_ids => [])
     end
 end

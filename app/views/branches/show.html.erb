@@ -1,9 +1,11 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Nazwa:</strong>
-  <%= @branch.nazwa %>
-</p>
+
+<h2>Lista pracowników oddziału: <%= @branch.nazwa %> </h2>
+
+<% @users.each do |u| %>
+	<p><%= u %></p>
+<% end %>
 
 <%= link_to 'Edit', edit_branch_path(@branch) %> |
 <%= link_to 'Back', branches_path %>

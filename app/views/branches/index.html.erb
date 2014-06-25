@@ -1,6 +1,6 @@
 <h1>Listing branches</h1>
 
-<table>
+<table class="table">
   <thead>
     <tr>
       <th>Nazwa</th>
@@ -11,8 +11,7 @@
   <tbody>
     <% @branches.each do |branch| %>
       <tr>
-        <td><%= branch.nazwa %></td>
-        <td><%= link_to 'Show', branch %></td>
+        <td><%= link_to branch.nazwa, branch %></td>
         <td><%= link_to 'Edit', edit_branch_path(branch) %></td>
         <td><%= link_to 'Destroy', branch, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>

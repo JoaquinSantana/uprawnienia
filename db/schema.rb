@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140623101506) do
+ActiveRecord::Schema.define(version: 20140624095132) do
 
   create_table "branches", force: true do |t|
     t.string   "nazwa"
@@ -31,6 +31,11 @@ ActiveRecord::Schema.define(version: 20140623101506) do
     t.integer  "status",     limit: 255, default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "orders_users", id: false, force: true do |t|
+    t.integer "order_id"
+    t.integer "user_id"
   end
 
   create_table "products", force: true do |t|

@@ -42,11 +42,17 @@ class OrderItemsController < ApplicationController
   # DELETE /order_items/1
   # DELETE /order_items/1.json
   def destroy
-    @order_item.destroy
-    respond_to do |format|
-      format.html { redirect_to @order }
-      flash[:success] = "Rola została usunięta z wniosku"
-      format.json { head :no_content }
+    order = @order_item.order
+    if order.niezatwierdzony?
+      @order_item.destroy
+      respond_to do |format|
+        format.html { redirect_to @order }
+        flash[:success] = "Rola została usunięta z wniosku"
+        format.json { head :no_content }
+      end
+    else
+      flash[:error] = "Wniosek jest w realizacji"
+      redirect_to order
     end
   end
 

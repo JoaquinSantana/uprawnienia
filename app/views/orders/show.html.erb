@@ -7,19 +7,6 @@
 	</tr>
 	
 	<tr>
-		<th>Uprawnienia dla:</th>
-		<% if @order.niezatwierdzony? %>
-			<%= form_for @order do |f| %>
-				<td>
-					<%= f.select :user_id, @prac %>
-				</td>
-			<!-- current_user.subordinates.collect{|a| [a.to_s, a.id]}  -->
-			<% end %>
-		<% else %>
-		<td><%= @order.user %></td>
-		<% end %>
-	</tr>
-	<tr>
 		<th>Nowy pracownik?</th>
 		<td><%= link_to "Dodaj pracownika", '#' %></td>
 	</tr>
@@ -46,7 +33,52 @@
 		</tr>
 	<% end %>
 </table>
-<%= link_to "Usuń wniosek", @order, data: { confirm: 'Are you sure?' }, method: :delete %>
 
+<% unless @order.contributors.blank? %>
+
+	<table class="table">
+	  <thead>
+	    <tr>
+	      <th>Uprawnienia dla:</th>
+	      <th>Oddział</th>
+	    </tr>
+	  </thead>
+
+	  <tbody>
+	    <% @order.contributors.each do |worker| %>
+	      <tr>
+	        <td><%= worker %></td>
+	        <td><%= worker.branch unless worker.branch.blank? %></td>
+	      </tr>
+	    <% end %>
+	  </tbody>
+	</table>
+
+<% end %>
+
+<% @users = User.all %>
+
+	<table class="table">
+	  <thead>
+	    <tr>
+	      <th>Uprawnienia dla:</th>
+	      <th>Oddział</th>
+	    </tr>
+	  </thead>
+
+	  <tbody>
+	    <% @users.each do |worker| %>
+	      <tr>
+	        <td><%= worker %></td>
+	        <td><%= worker.orders.count %></td>
+	      </tr>
+	    <% end %>
+	  </tbody>
+	</table>
+
+
+
+<%= link_to "Usuń wniosek", @order, data: { confirm: 'Are you sure?' }, method: :delete %>
+<%= link_to 'Dodaj pracownika do wniosku', edit_order_path(@order) %>
 <%= link_to 'Zatwierdz do realizacji', zatwierdz_order_path, method: :patch %> |
 <%= link_to 'Back', root_path %>
