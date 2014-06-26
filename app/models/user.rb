@@ -1,6 +1,8 @@
 class User < ActiveRecord::Base
   include TheRole::User
+  before_create :set_default_role
   acts_as_tree order: "email"
+
 
   
   # Include default devise modules. Others available are:
@@ -13,7 +15,7 @@ class User < ActiveRecord::Base
   belongs_to :manager, class_name: "User"
 
 
-  has_many :orders
+  has_many :orders, inverse_of: :user
   belongs_to :branch
 
   def to_s
@@ -22,5 +24,11 @@ class User < ActiveRecord::Base
     else
       imie + ' ' + nazwisko
     end
+  end
+
+  private
+
+  def set_default_role
+    self.role ||= Role.with_name(:uzyt)
   end
 end

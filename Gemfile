@@ -11,8 +11,13 @@ gem 'simple_form'
 gem 'devise'
 gem 'acts_as_tree', '~>1.6.1'
 
+gem 'faker', '1.1.2'
+
 gem 'the_role_bootstrap3_ui'
 gem 'the_role', '~> 2.5.2'
+
+gem 'will_paginate', '3.0.4'
+gem 'bootstrap-will_paginate', '0.0.9'
 
 gem 'jquery-rails'
 gem 'turbolinks'

@@ -2,7 +2,7 @@
  
 
   <div class="form-inputs">
-  	<%= hidden_field_tag "order[contributor_ids][]", nil %>
+  	<%#= hidden_field_tag "order[contributor_ids][]", nil %>
     <% @prac.each do |contributor| %>
 
       <%= check_box_tag "order[contributor_ids][]", contributor.id, @order.contributor_ids.include?(contributor.id), id: dom_id(contributor) %>

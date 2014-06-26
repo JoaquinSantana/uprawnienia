@@ -1,6 +1,33 @@
+
+<h1>Wnioski pracowników Oddziału <%= current_user.branch %></h1>
+<table class='table'>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Użytkownik</th>
+      <th>Status</th>
+      <th>Utworzony</th>
+      <th>Modyfikacja</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @ord.each do |o| %>
+    <tr>
+      <td><%= link_to o.id, o %></td>
+      <td><%= o.user.email %></td>
+      <td><%= o.status %></td>
+      <td><%= o.created_at %></td>
+      <td><%= o.updated_at %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<%= will_paginate @ord %>
+
+
+
 <h1>Twoje wnioski</h1>
-
-
 <table class='table'>
   <thead>
     <tr>

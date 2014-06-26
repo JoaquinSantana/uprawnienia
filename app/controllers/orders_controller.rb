@@ -3,11 +3,13 @@ class OrdersController < ApplicationController
   before_action :role_required
   before_action :find_ord, only: [:index]
   before_action :set_order, only: [:show, :edit, :update, :destroy, :zatwierdz, :copy]
-  before_action :owner_required, only: [:show, :edit, :update, :destroy, :copy]
+  before_action :owner_required, only: [:edit, :update, :destroy, :copy]
   before_action :copy, only: [:update]
   # GET /orders
   # GET /orders.json
   def index
+    branch = current_user.branch
+    @ord = branch.orders.paginate(:page => params[:page], :per_page => 10)
     @orders = current_user.orders
   end
 
@@ -47,9 +49,11 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1.json
   def update
     if @order.update_attributes(order_params)
-      redirect_to @order, notice: "Pracownicy zostali dodani do wnisoku"
+      current_user.orders << @order
+      redirect_to orders_path, notice: "Pracownicy zostali dodani do wnisoku"
     else
       render :edit
+      flash[:error] = "Błąd"
     end
   end
 
@@ -93,7 +97,13 @@ class OrdersController < ApplicationController
 
     def copy
       params[:order][:contributor_ids].each do |c|
-        next if c == ''
+=begin
+        if c == ''
+          current_user.orders << @order
+          next
+        end
+=end
+      
         user = User.find(c)
         user.orders << @order
       end
