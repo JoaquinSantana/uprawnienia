@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   belongs_to :manager, class_name: "User"
 
 
-  has_many :orders, inverse_of: :user
+  has_many :orders
   belongs_to :branch
 
   def to_s

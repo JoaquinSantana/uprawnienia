@@ -5,6 +5,9 @@
 
 <% @users.each do |u| %>
 	<p><%= u %></p>
+	<% u.orders.each do |x| %>
+		<p><%= link_to x.id, x %></p>
+	<% end %>
 <% end %>
 
 <%= link_to 'Edit', edit_branch_path(@branch) %> |

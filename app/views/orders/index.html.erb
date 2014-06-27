@@ -1,5 +1,63 @@
+<% if current_user.admin? %>
+<div class="container">
+  <div class="page-header">
+    <h2>Wnioski pracowników </h2>
+  </div>
+  <div class="row">
+    <div class="span9">
+      <table class='table'>
+        <tbody>
+          <% Order.all.each do |ord| %>
+            <tr>
+              <td><%= link_to ord.id, ord %></td>
+              <td><%= ord.user %></td>
+              <td><%= ord.user.branch %></td>
+              <td><%= ord.status %></td>
+              <td><%= ord.created_at %></td>
+              <td><%= ord.updated_at %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
-<h1>Wnioski pracowników Oddziału <%= current_user.branch %></h1>
+<% end %>
+
+<% if current_user.role == Role.with_name(:kier) %>
+<div class="page-header">
+  <h2>Wnioski pracowników Oddziału <%= current_user.branch %></h2>
+</div>
+  <table class='table'>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Użytkownik</th>
+        <th>Status</th>
+        <th>Utworzony</th>
+        <th>Modyfikacja</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% @ord.each do |o| %>
+      <tr>
+        <td><%= link_to o.id, o %></td>
+        <td><%= o.user %></td>
+        <td><%= o.status %></td>
+        <td><%= o.created_at %></td>
+        <td><%= o.updated_at %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+
+  <%= will_paginate @ord %>
+<% end %>
+
+<div class="page-header">
+  <h2>Twoje wnioski</h2>
+</div>
 <table class='table'>
   <thead>
     <tr>
@@ -11,37 +69,13 @@
     </tr>
   </thead>
   <tbody>
-  <% @ord.each do |o| %>
-    <tr>
-      <td><%= link_to o.id, o %></td>
-      <td><%= o.user.email %></td>
-      <td><%= o.status %></td>
-      <td><%= o.created_at %></td>
-      <td><%= o.updated_at %></td>
-    </tr>
-  <% end %>
-  </tbody>
-</table>
-
-<%= will_paginate @ord %>
-
-
-
-<h1>Twoje wnioski</h1>
-<table class='table'>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Użytkownik</th>
-      <th colspan="3">Status</th>
-    </tr>
-  </thead>
-  <tbody>
   <% @orders.each do |o| %>
     <tr>
       <td><%= link_to o.id, o %></td>
-      <td><%= o.user.email %></td>
+      <td><%= o.user %></td>
       <td><%= o.status %></td>
+      <td><%= o.created_at %></td>
+      <td><%= o.updated_at %></td>
     </tr>
   <% end %>
   </tbody>

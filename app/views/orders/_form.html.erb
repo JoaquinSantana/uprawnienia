@@ -3,13 +3,18 @@
 
   <div class="form-inputs">
   	<%#= hidden_field_tag "order[contributor_ids][]", nil %>
-    <% @prac.each do |contributor| %>
+    
 
-      <%= check_box_tag "order[contributor_ids][]", contributor.id, @order.contributor_ids.include?(contributor.id), id: dom_id(contributor) %>
+    <%# @prac.each do |contributor| %>
+
+
+      <%#= check_box_tag "order[contributor_ids][]", contributor.id, @order.contributor_ids.include?(contributor.id), id: dom_id(contributor) %>
+
       
-      <%= label_tag dom_id(contributor), contributor %>
+      <%#= label_tag dom_id(contributor), contributor %>
 
-    <% end %>
+    <%# end %>
+      <%= collection_check_boxes(:order, :contributor_ids, @prac, :id, :to_s) %> 
   </div>
 
   <div class="form-actions">

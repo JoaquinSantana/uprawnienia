@@ -2,14 +2,15 @@ class OrdersController < ApplicationController
   before_action :authenticate_user!
   before_action :role_required
   before_action :find_ord, only: [:index]
-  before_action :set_order, only: [:show, :edit, :update, :destroy, :zatwierdz, :copy]
-  before_action :owner_required, only: [:edit, :update, :destroy, :copy]
-  before_action :copy, only: [:update]
+  before_action :set_order, only: [:show, :edit, :update, :destroy, :zatwierdz]
+  #before_action :owner_required, only: [:update, :destroy]
   # GET /orders
   # GET /orders.json
   def index
-    branch = current_user.branch
-    @ord = branch.orders.paginate(:page => params[:page], :per_page => 10)
+    if current_user.role == Role.with_name(:kier)
+      branch = current_user.branch
+      @ord = branch.orders.paginate(:page => params[:page], :per_page => 10)
+    end
     @orders = current_user.orders
   end
 
@@ -49,7 +50,9 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1.json
   def update
     if @order.update_attributes(order_params)
-      current_user.orders << @order
+      @order.contributors.each do |c|
+        c.orders << @order
+      end
       redirect_to orders_path, notice: "Pracownicy zostali dodani do wnisoku"
     else
       render :edit
@@ -92,21 +95,6 @@ class OrdersController < ApplicationController
     def set_order
       @order = Order.find(params[:id])
       @owner_check_object = @order
-    end
-
-
-    def copy
-      params[:order][:contributor_ids].each do |c|
-=begin
-        if c == ''
-          current_user.orders << @order
-          next
-        end
-=end
-      
-        user = User.find(c)
-        user.orders << @order
-      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
