@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140624095132) do
+ActiveRecord::Schema.define(version: 20140702102905) do
 
   create_table "branches", force: true do |t|
     t.string   "nazwa"
@@ -28,9 +28,12 @@ ActiveRecord::Schema.define(version: 20140624095132) do
 
   create_table "orders", force: true do |t|
     t.integer  "user_id"
-    t.integer  "status",     limit: 255, default: 0
+    t.integer  "status",       limit: 255, default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "wnioskujacy"
+    t.text     "kordkom"
+    t.boolean  "dane_osobowe",             default: false
   end
 
   create_table "orders_users", id: false, force: true do |t|
@@ -44,6 +47,7 @@ ActiveRecord::Schema.define(version: 20140624095132) do
     t.text     "opis"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "dane_osobowe", default: false
   end
 
   create_table "roles", force: true do |t|

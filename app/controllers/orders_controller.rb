@@ -2,15 +2,27 @@ class OrdersController < ApplicationController
   before_action :authenticate_user!
   before_action :role_required
   before_action :find_ord, only: [:index]
-  before_action :set_order, only: [:show, :edit, :update, :destroy, :zatwierdz]
+  before_action :set_order, only: [:show, :edit, :update, :destroy, :zatwierdz, :potwierdz]
   #before_action :owner_required, only: [:update, :destroy]
   # GET /orders
   # GET /orders.json
   def index
-    if current_user.role == Role.with_name(:kier)
+    # => Admin
+    if current_user.admin?
+      @ord = Order.all.paginate(:page => params[:page], :per_page => 10).uniq
+    # => Koordynator
+    elsif current_user.kord?
       branch = current_user.branch
-      @ord = branch.orders.paginate(:page => params[:page], :per_page => 10)
+      @ord = branch.orders.paginate(:page => params[:page], :per_page => 10).uniq
+    # => Kierownik działu
+    elsif current_user.kier? 
+      branch = current_user.branch
+      @ord = branch.orders.paginate(:page => params[:page], :per_page => 10).uniq
+    elsif current_user.abi?
+      branch = current_user.branch
+      @ord = branch.orders.dane_osob.paginate(:page => params[:page], :per_page => 10).uniq 
     end
+    # => Wnioski uzytkownika
     @orders = current_user.orders
   end
 
@@ -18,7 +30,6 @@ class OrdersController < ApplicationController
   # GET /orders/1.json
   def show
     @user = current_user
-    
   end
 
   # GET /orders/new
@@ -49,21 +60,23 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
   def update
-    if @order.update_attributes(order_params)
-      @order.contributors.each do |c|
-        c.orders << @order
-      end
-      redirect_to orders_path, notice: "Pracownicy zostali dodani do wnisoku"
-    else
-      render :edit
-      flash[:error] = "Błąd"
+    unless params[:order][:kordkom].nil?
+      @order.kordpopr!
+      @order.kordkom = params[:order][:kordkom]
+      flash[:success] = 'Wniosek został przesłany do poprawy'
+      redirect_to @order
+    end
+
+    if params[:order][:kordkom].nil? && @order.update_attributes(order_params)
+      redirect_to @order, notice: "Pracownicy zostali dodani do wniosku"
     end
   end
 
   # DELETE /orders/1
   # DELETE /orders/1.json
   def destroy
-    if @order.niezatwierdzony?
+
+    if @order.niezatwierdzony? || @order.kordkom?
       @order.destroy
       respond_to do |format|
         format.html { redirect_to root_url }
@@ -77,16 +90,32 @@ class OrdersController < ApplicationController
   end
 
   def zatwierdz
-    if @order.order_items.empty?
+    if @order.order_items.empty? || @order.contributors.count == 0
       redirect_to @order
-      flash[:error] = "Wniosek nie posiada ról"
-    elsif @order.akcept
+      flash[:error] = "Wniosek nie posiada ról lub nie zostali przypisani pracownicy"
+    elsif @order.niezatwierdzony?
+      @order.akcept
       session[:order_id] = nil
       redirect_to @order
       flash[:success] = "Twój wniosek został przesłany do realizacji"
+    elsif @order.potwierdzony?
+      @order.abi_potwierdzam
+      flash[:success] = "Wniosek został potwierdzony przez ABI"
+      redirect_to @order
     else
       flash[:error] = "Wniosek jest w trakcie realizacji"
       redirect_to :back
+    end
+  end
+
+  def potwierdz
+     #current_user.kier? && @order.wobiegu?
+    if @order.potwierdzam
+      redirect_to @order
+      flash[:success] = "Wniosek został potwierdzony"
+    else
+      redirect_to @order
+      flash[:error] = "Wniosek został już potwierdzony"
     end
   end
 
@@ -99,6 +128,6 @@ class OrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
-      params.require(:order).permit(:status, :contributor_ids => [])
+      params.require(:order).permit(:status, :kordkom, :user_ids => [], :contributor_ids => [])
     end
 end

@@ -9,4 +9,9 @@ class Product < ActiveRecord::Base
 			
 	validates :nazwa, :opis, presence: true
 
+
+	def do
+		"Przetwarza dane osobowe" if self.dane_osobowe == true
+	end
+
 end

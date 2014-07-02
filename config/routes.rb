@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     concerns :the_role
   end
 
-#, :controllers => { :sessions => 'users/sessions' }
+# :controllers => { :sessions => 'users/sessions' }
   
   resources :orders do
     collection do
@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     end
     member do
       patch 'zatwierdz'
+      patch 'potwierdz'
     end
   end
   resources :order_items, only: [:create, :edit, :update, :destroy]

@@ -1,13 +1,9 @@
-<h1>Twój wniosek</h1>
-
+<div class="well">
+<h2>Wniosek nr: <%= @order.id %></h2>
 <table class="table">
 	<tr>
-		<th>ID:</th>
-		<td><%= @order.id %></td>
-	</tr>
-	<tr>
 		<th>Wnioskujący:</th>
-		<td><%= @order.user %></td>
+		<td><%= @order.wnioskujacy %></td>
 	</tr>
 	
 	<tr>
@@ -18,21 +14,32 @@
 		<th>Status:</th>
 		<td><%= @order.status %></td>
 	</tr>
+	<% unless @order.kordkom.nil? %>
+		<tr>
+			<th>Komentarz:</th>
+			<td><%= @order.kordkom %></td>
+		</tr>
+	<% end %>
 	<tr>
 		<th>Ilość ról:</th>
 		<td><%= @order.order_items.count %></td>
 	</tr>
 
+
+
 	<tr>
 		<th>Numer roli</th>
 		<th>Nazwa</th>
 		<th>Opis</th>
+		<th>Dane osobowe</th>
+		<th></th>
 	</tr>
 	<% @order.order_items.each do |item| %>
 		<tr>	
 			<td><%= item.product.nr_roli %></td>
 			<td><%= item.product.nazwa %></td>
 			<td><%= item.product.opis %></td>
+			<td><%= item.product.do %></td>
 			<td><%= link_to 'Usun role z wniosku', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
 		</tr>
 	<% end %>
@@ -47,12 +54,13 @@
 	      <th>Oddział</th>
 	    </tr>
 	  </thead>
+	  
 
 	  <tbody>
-	    <% @order.contributors.each do |worker| %>
+	    <% @order.contributors.each do |cont| %>
 	      <tr>
-	        <td><%= worker %></td>
-	        <td><%= worker.branch unless worker.branch.blank? %></td>
+	        <td><%= cont %></td>
+	        <td><%= cont.branch unless cont.branch.blank? %></td>
 	      </tr>
 	    <% end %>
 	  </tbody>
@@ -83,7 +91,20 @@
 
 
 
-<%= link_to "Usuń wniosek", @order, data: { confirm: 'Are you sure?' }, method: :delete %>
-<%= link_to 'Dodaj pracownika do wniosku', edit_order_path(@order) %>
-<%= link_to 'Zatwierdz do realizacji', zatwierdz_order_path, method: :patch %> |
+<%= link_to "Usuń wniosek", @order, data: { confirm: 'Usunąć wniosek?' }, method: :delete %>
+
+<% if current_user.kier? %>
+	<%= link_to 'Dodaj pracownika do wniosku', edit_order_path(@order) %>
+	<%= link_to 'Zatwierdz do realizacji', zatwierdz_order_path, method: :patch %>
+<% elsif current_user.kord? %>
+ 	<%= link_to 'Potwierdz', potwierdz_order_path, method: :patch %>
+
+ 	<%= render partial: "popraw" %>
+
+<% elsif current_user.abi? %>
+	<%= link_to 'Akceptuje', zatwierdz_order_path, method: :patch %>
+<% end %>
+
 <%= link_to 'Back', orders_path %>
+
+</div>

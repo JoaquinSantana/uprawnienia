@@ -26,9 +26,11 @@ class ApplicationController < ActionController::Base
 	  private 
 
 	  def find_ord
-      @order = Order.find(session[:order_id])
+    	@order = Order.find(session[:order_id])
     rescue ActiveRecord::RecordNotFound
-      @order = current_user.orders.create
-      session[:order_id] = @order.id  
+    	@order = current_user.orders.create
+    	@order.wnioskujacy = current_user.nazwa
+    	@order.save
+    	session[:order_id] = @order.id  
     end
 end

@@ -1,9 +1,8 @@
 class User < ActiveRecord::Base
   include TheRole::User
   before_create :set_default_role
+
   acts_as_tree order: "email"
-
-
   
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -15,8 +14,20 @@ class User < ActiveRecord::Base
   belongs_to :manager, class_name: "User"
 
 
-  has_many :orders
+  has_and_belongs_to_many :orders
   belongs_to :branch
+
+  def kord?
+    role == Role.with_name(:koord)
+  end
+
+  def kier?
+    role == Role.with_name(:kier)
+  end
+
+  def abi?
+    role == Role.with_name(:abi)
+  end
 
   def to_s
   	if imie.blank? && nazwisko.blank?
@@ -25,6 +36,12 @@ class User < ActiveRecord::Base
       imie + ' ' + nazwisko
     end
   end
+
+  def nazwa
+    imie + ' ' + nazwisko
+  end
+
+
 
   private
 

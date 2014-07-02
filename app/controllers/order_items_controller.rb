@@ -3,6 +3,7 @@ class OrderItemsController < ApplicationController
   before_action :set_order_item, only: [:edit, :update, :destroy]
   before_action :role_required
   before_action :find_ord, only: [:create, :destroy]
+  after_action :check_dane_osobowe, only: [:create]
   # GET /order_items/1/edit
   def edit
   end
@@ -68,5 +69,13 @@ class OrderItemsController < ApplicationController
       params.require(:order_item).permit(:product_id, :order_id)
     end
 
-
+    def check_dane_osobowe
+      if @order.products.each do |x|
+          if x.dane_osobowe == true
+            @order.dane_osobowe = true
+            @order.save
+          end
+        end
+      end
+    end
 end

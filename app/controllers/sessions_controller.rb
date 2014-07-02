@@ -13,7 +13,7 @@ class SessionsController < Devise::SessionsController
 	def destroy
 		session[:order_id] = nil
 	    session[:user_id] = nil
-	    current_user.orders.collect {|x| x.destroy! if x.status == 'niezatwierdzony'}
+	    Order.all.collect {|x| x.destroy! if x.status == 'niezatwierdzony'}
 	    super
 	end
 end

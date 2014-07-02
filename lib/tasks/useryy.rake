@@ -1,7 +1,8 @@
 namespace :db do 
 	desc "Przykładowi pracownicy"
 	task populate: :environment do
-		dodaj_uzyt
+		#dodaj_uzyt Dodawanie użytkowników
+		dodaj_produkt #dodanie produktów (ról)
 	end
 end
 
@@ -28,5 +29,13 @@ def dodaj_uzyt
 	end
 end
 
+
+def dodaj_produkt
+	Product.create(nr_roli: 1222, nazwa: 'KLM', opis: "Tworzenie planu zapotrzebowań")
+	Product.create(nr_roli: 134, nazwa: 'KKW', opis: "Potwierdzanie zamówień", dane_osobowe: true)
+	Product.create(nr_roli: 4324, nazwa: 'SDR', opis: "Edycja pracowników SDR", dane_osobowe: true)
+	Product.create(nr_roli: 561, nazwa: 'LZAM', opis: "Waga towarowa - obsługa")
+	Product.create(nr_roli: 8346, nazwa: 'SOP', opis: "Przegląd na produkcji", dane_osobowe: true)
+end
 
 
