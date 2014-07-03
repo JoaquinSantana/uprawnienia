@@ -13,3 +13,13 @@
   .wniosek {
   	padding-left: 0px;
   }
+
+  .decyzja-od {
+    color: white;
+    font-size: 20px;
+    background-color: gray;
+    padding-left: 33%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    margin-left: 0px;
+  }

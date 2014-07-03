@@ -2,11 +2,14 @@
  ✔ Dodać rolę dla ABI Lokalnego @done (14-07-02 09:31)
  ✔ Dodać możliwość odrzucania roli @done (14-07-02 09:33)
  
- ☐ Dodać do klasy Products(Rola) columne przetwarzanie danych
+ ✔ Dodać do klasy Products(Rola) columne przetwarzanie danych @done (14-07-02 14:21)
    ✔ Dodano dane osobowe do tabeli @done (14-07-02 09:34)
    ✔ Dodać do ról testowych czy przetwarzają dane osobowe. @done (14-07-02 11:58)
-   ☐ Lokalny abi widzi wszystkie wnioski ze swojego oddziału, w których chociaż jedna rola przetwarza dane osobowe
+   ✔ Lokalny abi widzi wszystkie wnioski ze swojego oddziału, w których chociaż jedna rola przetwarza dane osobowe @done (14-07-02 14:21)
    ☐ Dodać do formularza produktu(roli) mozliwosc oznaczenia czy dany produkt przetwarza dane osobowe.
    
 
  ☐ Dodać możliwośc akceptacji wniosków
+   ✔ Dodano za pomoca scaffold klasę decision @done (14-07-02 14:22)
+   ☐ skonfigurować decisionscontroller
+   ☐ dodać możliwość odrzucenia wniosku

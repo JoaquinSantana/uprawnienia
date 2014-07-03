@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   
+
+
   get 'static_pages/pomoc'
 
   devise_for :users, controllers: {sessions: "sessions", users: "users"}
@@ -20,14 +22,15 @@ Rails.application.routes.draw do
       patch 'zatwierdz'
       patch 'potwierdz'
     end
+  resource :decisions
   end
   resources :order_items, only: [:create, :edit, :update, :destroy]
   resources :products
   resources :workers
   resources :branches
 
-  root 'products#index'
 
   get '/pomoc', to: 'static_pages#pomoc'
 
+  root 'products#index'
 end

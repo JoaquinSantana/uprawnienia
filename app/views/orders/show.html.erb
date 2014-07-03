@@ -12,7 +12,7 @@
 	</tr>
 	<tr>
 		<th>Status:</th>
-		<td><%= @order.status %></td>
+		<td><%= @order.sprawdz_status %></td>
 	</tr>
 	<% unless @order.kordkom.nil? %>
 		<tr>
@@ -88,7 +88,19 @@
 	    <% end %>
 	  </tbody>
 	</table>
-
+<% if @order.decision && @order.decision.opinia %>
+	<div class="row decyzja">			
+		<div class="span9">
+			<b><p>Wniosek ZAAKCEPTOWANY</p></b>
+		</div>
+	</div>
+<% elsif @order.decision.present? && @order.decision.opinia == false %>
+	<div class="row decyzja-od">			
+		<div class="span9">
+			<b><p>Wniosek ODRZUCONY</p></b>
+		</div>
+	</div>
+<% end %>
 
 
 <%= link_to "Usuń wniosek", @order, data: { confirm: 'Usunąć wniosek?' }, method: :delete %>
@@ -103,6 +115,7 @@
 
 <% elsif current_user.abi? %>
 	<%= link_to 'Akceptuje', zatwierdz_order_path, method: :patch %>
+	<%= link_to "Brak zgody", order_decisions_path(@order, :decision => {:opinia => false}), :method => :post %>
 <% end %>
 
 <%= link_to 'Back', orders_path %>

@@ -5,10 +5,10 @@ class Order < ActiveRecord::Base
 	scope :abii, -> { where(status: 4)} #Zaakceptowane przez ABI
 	scope :dane_osob, -> { where(dane_osobowe: true)}
 
+	has_one :decision
+
 	has_many :order_items, dependent: :destroy
 	has_many :products, through: :order_items
-
-
 
 	has_and_belongs_to_many :users
 	has_and_belongs_to_many :contributors, class_name: 'User'
@@ -16,11 +16,12 @@ class Order < ActiveRecord::Base
 
 
 	enum status: [
-								:niezatwierdzony,
-					 			:wobiegu, 
-					 			:potwierdzony, 
-					 			:kordpopr, 
-					 			:abipotwierdzam
+								:niezatwierdzony, #Status wniosku zainicjowanego
+					 			:wobiegu, 				#Status wniosku wysłanego do akceptacji
+					 			:potwierdzony, 		#Status wniosku potwierdzonego przez Koordynatora
+					 			:kordpopr, 				#Status wniosku wystawionego do poprawy przez Koordynatora
+					 			:abipotwierdzam,	#Status wniosku potwierdzonego przez ABI
+					 			:odrzucony				#Status wniosku odrzuconego
 					 											]
 
 
@@ -36,6 +37,10 @@ class Order < ActiveRecord::Base
 		self.abipotwierdzam! if status == "potwierdzony"
 	end
 
+	def brak_zgody
+		self.odrzucam!
+	end
+
 	def sprawdz_status
 		if status == "niezatwierdzony"
 			return "Niezatwierdzony"
@@ -47,6 +52,8 @@ class Order < ActiveRecord::Base
 			return "Do poprawy"
 		elsif status == "abipotwierdzam"
 			return "Potwierdzony przez ABI"
+		elsif status == "odrzucony"
+			return "Wniosek odrzucony"
 		end
 	end
 

@@ -11,10 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140702102905) do
+ActiveRecord::Schema.define(version: 20140703084250) do
 
   create_table "branches", force: true do |t|
     t.string   "nazwa"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "decisions", force: true do |t|
+    t.integer  "order_id"
+    t.boolean  "opinia"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
