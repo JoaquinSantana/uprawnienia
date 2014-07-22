@@ -10,5 +10,15 @@
   <%= @order_item.order_id %>
 </p>
 
+<h2>Obszar widzenia:</h2>
+
+
+
+<%#= render "areas/form" %>
+
+<!-- <h2>Dodaj obszar widzenia:</h2> -->
+	
+ -->
+
 <%= link_to 'Edit', edit_order_item_path(@order_item) %> |
-<%= link_to 'Back', order_items_path %>
+<%= link_to 'Back', order_path(@order_item.order) %>

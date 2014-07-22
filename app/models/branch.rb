@@ -1,9 +1,9 @@
 class Branch < ActiveRecord::Base
-	validate :nazwa, presence: true
-	has_many :users
-	has_many :orders, through: :users
-
-
+  has_many :users
+  has_many :orders, :through => :users
+  has_and_belongs_to_many :order_items
+	
+  validate :nazwa, presence: true
 
 	def to_s
 		nazwa

@@ -1,0 +1,9 @@
+= simple_form_for(order_item) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = collection_check_boxes(:order, :branch_ids, Branch.all, :id, :to_s) 
+    
+  .form-actions
+    = f.button :submit
+

@@ -1,0 +1,9 @@
+= form_for(@order_item) do |f|
+ 
+  .form-inputs
+    = collection_check_boxes :order_item, :branch_ids, Branch.all, :id, :nazwa, :item_wrapper_class => 'inline'
+
+  .form-actions
+    = f.submit
+
+

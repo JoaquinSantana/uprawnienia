@@ -1,0 +1,10 @@
+= simple_form_for([order_item, order_item.branches]) do |f|
+	= f.error_notification
+
+	.form-inputs
+		= f.input :nazwa, :collection => Branch.all ,:label_method => :nazwa, :value_method => :id, :label => "Obszar", :include_blank => false, as: :radio_buttons
+		
+	.form-actions
+		= f.button :submit
+
+

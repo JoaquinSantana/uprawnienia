@@ -6,13 +6,12 @@ class Order < ActiveRecord::Base
 	scope :dane_osob, -> { where(dane_osobowe: true)}
 
 	has_one :decision
-
+	
 	has_many :order_items, dependent: :destroy
 	has_many :products, through: :order_items
 
 	has_and_belongs_to_many :users
 	has_and_belongs_to_many :contributors, class_name: 'User'
-	has_many :workers
 
 
 	enum status: [
@@ -55,6 +54,10 @@ class Order < ActiveRecord::Base
 		elsif status == "odrzucony"
 			return "Wniosek odrzucony"
 		end
+	end
+
+	def oddzial_wnioskujacego
+		users.first.branch.nazwa
 	end
 
 end

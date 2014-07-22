@@ -1,0 +1,15 @@
+.row.order_item
+	.span8
+		%strong Rola:
+		= order_item.product.nr_roli
+		= order_item.product.nazwa
+		= order_item.product.opis
+
+		%h5 Obszar widzenia:
+		- unless order_item.branches.blank?
+			= render order_item.branches
+		
+		- if order_item.order.niezatwierdzony?
+			%p
+				= link_to "Dodaj obszar widzenia", edit_order_item_path(order_item)
+

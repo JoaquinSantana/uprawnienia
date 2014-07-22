@@ -1,0 +1,101 @@
+.row.well.wniosek
+	.span8.page-header
+		%h3 
+			KW S.A. #{@order.oddzial_wnioskujacego}
+		Wniosek o nadanie, modyfikację lub usunięcie uprawnień do systemów informatycznych.
+
+	.order-body.span8
+		.row
+			%h4 Dane użytkownika:
+			
+			.span4
+				%strong Wnioskujący:
+			.span4
+				= @order.wnioskujacy
+			
+			.span4
+				%strong Email:
+			.span4
+				test1@test.com		
+			
+			.span4
+				%strong Oddział
+			.span4
+				= @order.oddzial_wnioskujacego
+						
+			.span4
+				%strong Biuro
+			.span4
+				= @order.wnioskujacy
+			
+			.span4
+				%strong Nr telefonu
+			.span4
+				32 716 66 26				
+			
+			.span4
+				%strong Nowy pracownik?
+			.span4
+				= link_to "Dodaj pracownika", '#'
+
+			.span4
+				%strong Status:
+			.span4
+				= @order.sprawdz_status
+			
+			- unless @order.kordkom.nil?
+				.span4
+					%strong Komentarz:
+				.span4
+					= @order.kordkom
+
+			&nbsp;
+			.span8.roleklas
+				%h4 Uprawnienia do systemów:
+				= render @order.order_items
+		
+			- unless @order.contributors.blank?
+
+				%table.table.uprawnieni
+					%thead
+						%tr
+							%th 
+								%h4 Uprawnienia dla:
+							%th Oddział
+
+					%tbody
+						- @order.contributors.each do |cont|
+							%tr
+								%td= cont
+								%td= cont.branch unless cont.branch.blank?
+					 
+			- if @order.decision && @order.decision.opinia
+				.row.decyzja			
+					.span9
+						%b
+							%p Wniosek ZAAKCEPTOWANY
+			- elsif @order.decision.present? && @order.decision.opinia == false
+				.row.decyzja-od			
+					.span9
+						%b
+							%p Wniosek ODRZUCONY
+
+			- if current_user.kier? && @order.niezatwierdzony?
+				.well
+					= link_to 'Dodaj pracownika do wniosku', edit_order_path(@order), class: 'btn btn-warning btn-block'
+					= link_to 'Zatwierdz do realizacji', zatwierdz_order_path, method: :patch, class: 'btn btn-success btn-block'
+					= link_to "Usuń wniosek", @order, data: { confirm: 'Usunąć wniosek?' }, method: :delete, class: 'btn btn-danger btn-block'
+
+			- elsif current_user.kord?
+				.well
+					= link_to 'Potwierdz', potwierdz_order_path, method: :patch, class: 'btn btn-success btn-block'
+
+				= render partial: "popraw"
+
+			- elsif current_user.abi?
+				= link_to 'Akceptuje', zatwierdz_order_path, method: :patch
+				= link_to "Brak zgody", order_decisions_path(@order, :decision => {:opinia => false}), :method => :post
+
+= link_to 'Wszystkie wnioski', orders_path
+
+

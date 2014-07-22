@@ -1,0 +1,158 @@
+- if current_user.admin?
+	.page-header
+		%h2 Wnioski pracowników
+	.row
+		.span8
+			%table.table
+				%tbody
+					- @ord.each do |ord|
+						%tr
+							%td= link_to ord.id, ord
+							%td= ord.wnioskujacy
+							%td= ord.sprawdz_status
+							%td= ord.updated_at
+							%td= ord.created_at
+	
+	= will_paginate @ord
+
+	.row
+		.span8
+			= @ord.nowe.count 
+			wniosków oczekujących na akceptacje koordynatora
+
+		.span8
+			= @ord.potw.count 
+			wniosków zaakceptowanych przez koordynatora
+
+		.span8
+			= @ord.abii.count 
+			wniosków zaakceptowanych przez ABI
+			
+		.span8
+			= @ord.dane_osob.count 
+			wniosków przetwarzających dane osobowe
+
+- elsif current_user.kier?
+	.page-header
+		%h2 Wnioski pracowników Oddziału 
+		#{current_user.branch}
+	%table.table
+		%thead
+			%tr
+				%th ID
+				%th Wnioskujący
+				%th Status
+				%th Utworzony
+				%th Modyfikacja
+		%tbody
+			- @ord.each do |o|
+				%tr
+					%td= link_to o.id, o
+					%td= o.wnioskujacy
+					%td= o.sprawdz_status
+					%td= o.created_at
+					%td= o.updated_at
+	
+	= will_paginate @ord
+
+	.row
+		.span8
+			= @ord.nowe.count 
+			wniosków oczekujących na akceptacje koordynatora
+
+		.span8
+			= @ord.potw.count 
+			wniosków zaakceptowanych przez koordynatora
+
+		.span8
+			= @ord.abii.count 
+			wniosków zaakceptowanych przez ABI
+			
+		.span8
+			= @ord.dane_osob.count 
+			wniosków przetwarzających dane osobowe
+
+- elsif current_user.kord?
+	.page-header
+		%h2 
+			Wnioski pracowników Oddziału 
+			#{current_user.branch}
+	%table.table
+		%thead
+			%tr
+				%th ID
+				%th Wnioskujący
+				%th Status
+				%th Utworzony
+				%th Modyfikacja
+
+		%tbody
+			- @ord.each do |o|
+				%tr
+					%td= o.wnioskujacy
+					%td= link_to o.id, o
+					%td= o.sprawdz_status
+					%td= o.created_at
+					%td= o.updated_at
+
+	= will_paginate @ord
+
+	.row
+		.span8
+			= @ord.nowe.count 
+			wniosków oczekujących na akceptacje koordynatora
+
+		.span8
+			= @ord.potw.count 
+			wniosków zaakceptowanych przez koordynatora
+
+		.span8
+			= @ord.abii.count 
+			wniosków zaakceptowanych przez ABI
+			
+		.span8
+			= @ord.dane_osob.count 
+			wniosków przetwarzających dane osobowe
+
+- elsif current_user.abi?
+	.page-header
+		%h2 Wnioski pracowników Oddziału 
+		#{current_user.branch}
+
+	%table.table
+		%thead
+			%tr
+				%th ID
+				%th Wnioskujący
+				%th Status
+				%th Utworzony
+				%th Modyfikacja
+
+
+		%tbody
+			- @ord.each do |o|
+				%tr
+					%td= link_to o.id, o
+					%td= o.wnioskujacy
+					%td= o.sprawdz_status
+					%td= o.created_at
+					%td= o.updated_at
+
+	= will_paginate @ord
+
+	.row
+		.span8
+			= @ord.nowe.count 
+			wniosków oczekujących na akceptacje koordynatora
+
+		.span8
+			= @ord.potw.count 
+			wniosków zaakceptowanych przez koordynatora
+
+		.span8
+			= @ord.abii.count 
+			wniosków zaakceptowanych przez ABI
+			
+		.span8
+			= @ord.dane_osob.count 
+			wniosków przetwarzających dane osobowe

@@ -1,9 +1,5 @@
 Rails.application.routes.draw do
-  
-
-
-  get 'static_pages/pomoc'
-
+    
   devise_for :users, controllers: {sessions: "sessions", users: "users"}
 
   concern :the_role, TheRole::AdminRoutes.new
@@ -24,13 +20,18 @@ Rails.application.routes.draw do
     end
   resource :decisions
   end
-  resources :order_items, only: [:create, :edit, :update, :destroy]
+
+  resources :order_items, only: [:show, :create, :edit, :update, :destroy] do
+    resources :areas
+  end
+
   resources :products
   resources :workers
   resources :branches
 
 
   get '/pomoc', to: 'static_pages#pomoc'
+  get 'static_pages/pomoc'
 
   root 'products#index'
 end

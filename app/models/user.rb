@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
   belongs_to :branch
 
   def kord?
-    role == Role.with_name(:koord)
+    role == Role.with_name(:kord)
   end
 
   def kier?
@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
   end
 
   def to_s
-  	if imie.blank? && nazwisko.blank?
+  	if imie.blank? || nazwisko.blank?
       email
     else
       imie + ' ' + nazwisko

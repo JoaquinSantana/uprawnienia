@@ -1,0 +1,107 @@
+/*
+  =require twitter-bootstrap-static/bootstrap
+
+  Use Font Awesome icons (default)
+  To use Glyphicons sprites instead of Font Awesome, replace with "require twitter-bootstrap-static/sprites"
+  =require twitter-bootstrap-static/fontawesome
+*/
+
+body {
+	padding-top: 60px;
+}
+
+.wniosek {
+	padding-left: 0px;
+  margin-left: 0px;
+  .page-header {
+    text-align: center;
+    border-bottom: 2px solid green;
+  } 
+  .span8 {
+    padding-left: 0px;
+    margin-left: 0px;
+    .roleklas {
+      padding-left: 60px;
+      h4 {
+        margin-left: -40px;
+      }
+    } 
+  }
+
+  .order-body {
+   padding-left: 20px;
+   
+    .row {
+      .span4 {
+        padding-bottom: 10px;
+      }
+    }  
+
+   h4 {
+    margin-top: 0px;
+    margin-left: 20px;
+   }
+  }
+
+  .roleklas {
+
+  }
+
+  .well {
+    width: 88%;
+    margin-left: 20px;
+    background-color: white;
+  }
+
+  #komentarz {
+    h4 {
+      margin-left: 50px !important;
+      padding-bottom: 15px; 
+    }
+    .edit_order {
+      margin-left: 60px;
+    }
+    .form-actions {
+      padding-left: 0px;
+      padding-top: 0px;
+      margin-top: 0px;
+    }
+  }
+}
+
+
+.decyzja-od {
+  color: white;
+  font-size: 20px;
+  background-color: gray;
+  padding-left: 33%;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  margin-left: 0px;
+}
+
+.nav {
+  .nav-list {
+    .wniosek {
+      background-color: red;
+    }
+  } 
+}
+
+.order_item {
+  padding-top: 10px;
+  border-bottom: 2px solid green;
+  width: 95%;
+}
+
+.uprawnieni {
+  th {
+    h4 {
+      margin-left: -10px !important;
+      margin-top: 20px !important;
+    }   
+  }
+  margin-left: 20px;
+  width: 90%;
+}
+

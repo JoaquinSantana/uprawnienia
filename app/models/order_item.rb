@@ -1,5 +1,7 @@
 class OrderItem < ActiveRecord::Base
 	belongs_to :order
 	belongs_to :product
-	validates_uniqueness_of :product_id, :scope => :order_id, :message => "Wnioskujesz już o tą role"
+  has_and_belongs_to_many :branches
+  
+	validates :product_id, :uniqueness => { :scope => :order_id, :message => "Wnioskujesz już o tą role" }
 end

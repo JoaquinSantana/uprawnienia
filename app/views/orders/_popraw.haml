@@ -1,0 +1,11 @@
+#komentarz
+  .row
+    .span8
+      %h4 Wniosek nieprawidłowo wypełniony?
+
+      = simple_form_for(@order) do |f|
+        = f.error_notification
+        .form-inputs
+          = f.input :kordkom, placeholder: 'Dodaj komentarz', :label => false, :input_html => { :rows => 6, :style => "width: 100%;" }
+        .form-actions
+          = f.button :submit, "Prześlij", class: 'btn btn-primary'

@@ -1,0 +1,16 @@
+%h2 Zarejestruj
+= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
+  = f.error_notification
+
+  %div.form-inputs
+    = f.input :email, required: true, autofocus: true
+    = f.input :imie, required: true, autofocus: true
+    = f.input :nazwisko, required: true, autofocus: true
+    = f.input :branch_id, collection: Branch.all
+    = f.input :password, required: true
+    = f.input :password_confirmation, required: true 
+
+  %div.form-actions
+    = f.button :submit, "Zarejestruj"
+
+= render "devise/shared/links"

@@ -60,15 +60,16 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
   def update
-    unless params[:order][:kordkom].nil?
+    if @order.niezatwierdzony? && params[:order][:kordkom].nil? && @order.update_attributes(order_params)
+      redirect_to @order, notice: "Pracownicy zostali dodani do wniosku"
+    elsif !params[:order][:kordkom].nil?
       @order.kordpopr!
       @order.kordkom = params[:order][:kordkom]
       flash[:success] = 'Wniosek został przesłany do poprawy'
       redirect_to @order
-    end
-
-    if params[:order][:kordkom].nil? && @order.update_attributes(order_params)
-      redirect_to @order, notice: "Pracownicy zostali dodani do wniosku"
+    else
+      redirect_to @order
+      flash[:error] = "Na tym etapie nie możesz edytować wniosku"
     end
   end
 

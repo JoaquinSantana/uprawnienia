@@ -1,0 +1,159 @@
+<div class="row well wniosek">
+		<div class="span8 page-header">
+			<h3>KW S.A. Oddział <%= @order.oddzial_wnioskujacego %></h3>
+			Wniosek o nadanie, modyfikację lub usunięcie uprawnień do systemów informatycznych.
+		</div>
+
+		<div class="order-body span8">
+			<div class="row">
+				<h4>Dane użytkownika:</h4>
+				
+				<div class="span4">
+					<strong>Wnioskujący:</strong>
+				</div>
+				<div class="span4">
+					<%= @order.wnioskujacy %>		
+				</div>
+				
+				<div class="span4">
+					<strong>Email:</strong>
+				</div>
+				
+				<div class="span4">
+					test1@test.com<%#= @order.wnioskujacy %>		
+				</div>
+				
+				<div class="span4">
+					<strong>Oddział</strong>
+				</div>
+				<div class="span4">
+					<%= @order.oddzial_wnioskujacego %>		
+				</div>
+				
+				<div class="span4">
+					<strong>Biuro</strong>
+				</div>
+				<div class="span4">
+					<%= @order.wnioskujacy %>		
+				</div>				
+				
+				<div class="span4">
+					<strong>Nr telefonu</strong>
+				</div>
+				<div class="span4">
+					32 716 66 26
+				</div>				
+				
+				
+				<div class="span4">
+					<strong>Nowy pracownik?:</strong>
+				</div>
+				<div class="span4">
+					<%= link_to "Dodaj pracownika", '#' %>
+				</div>
+				<div class="span4">
+					<strong>Status:</strong>
+				</div>
+				<div class="span4">
+					<%= @order.sprawdz_status %>
+				</div>				
+			<% unless @order.kordkom.nil? %>
+				<div class="span4">
+					<strong>Komentarz:</strong>
+				</div>
+				<div class="span4">
+					%= @order.kordkom %>
+				</div>	
+			<% end %>
+			</div>
+
+			<p>
+				<strong>Ilość ról:</strong>
+				<%= @order.order_items.count %>
+			</p>
+			<p>
+				<p>
+					<%= render @order.order_items %>
+				</p>
+			</p>
+		
+		
+	<% unless @order.contributors.blank? %>
+
+		<table class="table">
+		  <thead>
+		    <tr>
+		      <th>Uprawnienia dla:</th>
+		      <th>Oddział</th>
+		    </tr>
+		  </thead>
+		  
+
+		  <tbody>
+		    <% @order.contributors.each do |cont| %>
+		      <tr>
+		        <td><%= cont %></td>
+		        <td><%= cont.branch unless cont.branch.blank? %></td>
+		      </tr>
+		    <% end %>
+		  </tbody>
+		</table>
+
+	<% end %>
+
+	<% @branche = current_user.branch %>
+	<% @users = @branche.users %>
+
+		<table class="table">
+		  <thead>
+		    <tr>
+		      <th>Uprawnienia dla:</th>
+		      <th>Ilość wniosków</th>
+		    </tr>
+		  </thead>
+
+		  <tbody>
+		    <% @users.each do |worker| %>
+		      <tr>
+		        <td><%= worker %></td>
+		        <td><%= worker.orders.count %></td>
+		      </tr>
+		    <% end %>
+		  </tbody>
+		</table>
+
+	<% if @order.decision && @order.decision.opinia %>
+		<div class="row decyzja">			
+			<div class="span9">
+				<b><p>Wniosek ZAAKCEPTOWANY</p></b>
+			</div>
+		</div>
+	<% elsif @order.decision.present? && @order.decision.opinia == false %>
+		<div class="row decyzja-od">			
+			<div class="span9">
+				<b><p>Wniosek ODRZUCONY</p></b>
+			</div>
+		</div>
+	<% end %>
+
+
+	<%= link_to "Usuń wniosek", @order, data: { confirm: 'Usunąć wniosek?' }, method: :delete %>
+
+	<% if current_user.kier? %>
+		<%= link_to 'Dodaj pracownika do wniosku', edit_order_path(@order) %>
+		<%= link_to 'Zatwierdz do realizacji', zatwierdz_order_path, method: :patch %>
+	<% elsif current_user.kord? %>
+	 	<%= link_to 'Potwierdz', potwierdz_order_path, method: :patch %>
+
+	 	<%= render partial: "popraw" %>
+
+	<% elsif current_user.abi? %>
+		<%= link_to 'Akceptuje', zatwierdz_order_path, method: :patch %>
+		<%= link_to "Brak zgody", order_decisions_path(@order, :decision => {:opinia => false}), :method => :post %>
+	<% end %>
+
+	<%= link_to 'Back', orders_path %>
+	
+	</div>
+</div>
+

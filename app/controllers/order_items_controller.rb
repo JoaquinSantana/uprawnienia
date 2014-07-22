@@ -1,27 +1,39 @@
 class OrderItemsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_order_item, only: [:edit, :update, :destroy]
+  before_action :set_order_item, only: [:show, :edit, :update, :destroy]
   before_action :role_required
   before_action :find_ord, only: [:create, :destroy]
-  after_action :check_dane_osobowe, only: [:create]
+  after_action  :check_dane_osobowe, only: [:create]
   # GET /order_items/1/edit
-  def edit
+  def index
+    @order_items = OrderItem.all
   end
+
+  def show
+  end
+
+  def edit
+    unless @order_item.order.niezatwierdzony?
+      redirect_to @order_item.order
+      flash[:error] = "Na tym etapie nie ma możliwości edytowania wniosku"
+    end
+  end
+
 
   # POST /order_items
   # POST /order_items.json
   def create
-    @order_item = @order.order_items.create(product_id: params[:product_id] )
+    order_item = @order.order_items.create(product_id: params[:product_id] )
 
     respond_to do |format|
-      if @order_item.save
+      if order_item.save
         format.html { redirect_to root_url }
         flash[:success] = "Rola została dodana do wniosku"
-        format.json { render :show, status: :created, location: @order_item }
+        format.json { render :show, status: :created, location: order_item }
       else
         format.html { redirect_to root_url }
         flash[:error] = "Wnioskujesz już o tą rolę"
-        format.json { render json: @order_item.errors, status: :unprocessable_entity }
+        format.json { render json: order_item.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -29,14 +41,11 @@ class OrderItemsController < ApplicationController
   # PATCH/PUT /order_items/1
   # PATCH/PUT /order_items/1.json
   def update
-    respond_to do |format|
-      if @order_item.update(order_item_params)
-        format.html { redirect_to @order_item, notice: 'Order item was successfully updated.' }
-        format.json { render :show, status: :ok, location: @order_item }
-      else
-        format.html { render :edit }
-        format.json { render json: @order_item.errors, status: :unprocessable_entity }
-      end
+    if @order_item.order.niezatwierdzony? && @order_item.update_attributes(order_item_params)
+      redirect_to @order_item.order 
+      flash[:success] = 'Order item was successfully updated.' 
+    else
+      format.html { render :edit }
     end
   end
 
@@ -66,7 +75,7 @@ class OrderItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_item_params
-      params.require(:order_item).permit(:product_id, :order_id)
+      params.require(:order_item).permit(:order_id, :product_id, :branch_ids => [])
     end
 
     def check_dane_osobowe
