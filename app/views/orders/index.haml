@@ -89,8 +89,8 @@
 		%tbody
 			- @ord.each do |o|
 				%tr
-					%td= o.wnioskujacy
 					%td= link_to o.id, o
+					%td= o.wnioskujacy
 					%td= o.sprawdz_status
 					%td= o.created_at
 					%td= o.updated_at
@@ -116,8 +116,7 @@
 
 - elsif current_user.abi?
 	.page-header
-		%h2 Wnioski pracowników Oddziału 
-		#{current_user.branch}
+		%h2 Wnioski pracowników Oddziału #{current_user.branch}
 
 	%table.table
 		%thead

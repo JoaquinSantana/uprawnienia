@@ -19,6 +19,7 @@ class OrdersController < ApplicationController
       branch = current_user.branch
       @ord = branch.orders.paginate(:page => params[:page], :per_page => 10).uniq
     elsif current_user.abi?
+    # => ABI
       branch = current_user.branch
       @ord = branch.orders.dane_osob.paginate(:page => params[:page], :per_page => 10).uniq 
     end

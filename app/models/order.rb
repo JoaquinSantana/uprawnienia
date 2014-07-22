@@ -3,7 +3,7 @@ class Order < ActiveRecord::Base
 	scope :nowe, -> { where(status: 1)} #Zaakceptepowane przez wnioskującego
 	scope :potw, -> { where(status: 2)} #Zaakceptowane przez Koordynator
 	scope :abii, -> { where(status: 4)} #Zaakceptowane przez ABI
-	scope :dane_osob, -> { where(dane_osobowe: true)}
+	scope :dane_osob, -> { where(status: 2, dane_osobowe: true)}
 
 	has_one :decision
 	
@@ -37,7 +37,7 @@ class Order < ActiveRecord::Base
 	end
 
 	def brak_zgody
-		self.odrzucam!
+		self.odrzucony!
 	end
 
 	def sprawdz_status

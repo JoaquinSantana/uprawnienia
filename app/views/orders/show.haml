@@ -2,7 +2,7 @@
 	.span8.page-header
 		%h3 
 			KW S.A. #{@order.oddzial_wnioskujacego}
-		Wniosek o nadanie, modyfikację lub usunięcie uprawnień do systemów informatycznych.
+		Wniosek id: <strong> #{@order.id} </strong> o nadanie, modyfikację lub usunięcie uprawnień do systemów informatycznych.
 
 	.order-body.span8
 		.row
@@ -92,8 +92,9 @@
 
 				= render partial: "popraw"
 
-			- elsif current_user.abi?
+			- elsif current_user.abi? && @order.decision.nil?
 				= link_to 'Akceptuje', zatwierdz_order_path, method: :patch
+			- elsif current_user.abi?
 				= link_to "Brak zgody", order_decisions_path(@order, :decision => {:opinia => false}), :method => :post
 
 = link_to 'Wszystkie wnioski', orders_path
