@@ -2,8 +2,9 @@ class OrderItemsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_order_item, only: [:show, :edit, :update, :destroy]
   before_action :role_required
-  before_action :find_ord, only: [:create, :destroy]
+  before_action :find_ord, only: [:create, :update, :destroy]
   after_action  :check_dane_osobowe, only: [:create]
+  after_action  :check_uprawnienia_lokalne, only: [:update]
   # GET /order_items/1/edit
   def index
     @order_items = OrderItem.all
@@ -86,5 +87,15 @@ class OrderItemsController < ApplicationController
           end
         end
       end
+    end
+
+    def check_uprawnienia_lokalne
+      ub = @order.users.first.branch
+      if @order_item.branches.size < 2 && @order_item.branches.include?(ub) 
+        @order.uprlok = true
+      else 
+        @order.uprlok = false
+      end
+      @order.save
     end
 end

@@ -11,6 +11,7 @@ gem 'simple_form'
 gem 'devise'
 gem 'haml'
 gem 'acts_as_tree', '~>1.6.1'
+gem "font-awesome-rails"
 
 gem 'faker', '1.1.2'
 
@@ -19,7 +20,6 @@ gem 'the_role', '~> 2.5.2'
 
 gem 'will_paginate', '3.0.4'
 gem 'bootstrap-will_paginate', '0.0.9'
-gem 'simple_form'
 
 gem 'jquery-rails'
 gem 'turbolinks'

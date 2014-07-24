@@ -92,10 +92,10 @@
 
 				= render partial: "popraw"
 
-			- elsif current_user.abi? && @order.decision.nil?
-				= link_to 'Akceptuje', zatwierdz_order_path, method: :patch
-			- elsif current_user.abi?
-				= link_to "Brak zgody", order_decisions_path(@order, :decision => {:opinia => false}), :method => :post
+			- elsif ( current_user.abi? && @order.decision.nil? ) || current_user.lokwl? || current_user.dyrektor?
+				.well
+					= link_to 'Akceptuje', zatwierdz_order_path, method: :patch, class: 'btn btn-success btn-block'
+					= link_to "Brak zgody", order_decisions_path(@order, :decision => {:opinia => false}), :method => :post, class: 'btn btn-warning btn-block'
 
 = link_to 'Wszystkie wnioski', orders_path
 

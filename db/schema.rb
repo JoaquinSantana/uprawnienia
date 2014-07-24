@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140715112921) do
+ActiveRecord::Schema.define(version: 20140723084955) do
 
   create_table "areas", force: true do |t|
     t.string   "nazwa"
@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(version: 20140715112921) do
     t.string   "wnioskujacy"
     t.text     "kordkom"
     t.boolean  "dane_osobowe",             default: false
+    t.boolean  "uprlok",                   default: false
   end
 
   create_table "orders_users", id: false, force: true do |t|
@@ -73,6 +74,11 @@ ActiveRecord::Schema.define(version: 20140715112921) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "dane_osobowe", default: false
+  end
+
+  create_table "products_users", id: false, force: true do |t|
+    t.integer "product_id"
+    t.integer "user_id"
   end
 
   create_table "roles", force: true do |t|

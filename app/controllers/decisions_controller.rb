@@ -26,7 +26,7 @@ class DecisionsController < ApplicationController
   def create
 
     @order = Order.find(params[:order_id])
-    if @order.decision.nil? && @order.potwierdzony?
+    if @order.decision.nil? && ( @order.potwierdzony? || @order.abipotwierdzam? )
       @decision = @order.build_decision(decision_params)
         if @decision.save
           if @decision.opinia == false
@@ -39,9 +39,12 @@ class DecisionsController < ApplicationController
         else
           redirect_to @order
         end
-    else
+    elsif !@order.decision.nil?
      flash[:error] = "Wniosek posiada już decyzję"
-     redirect_to @order
+     redirect_to @order 
+    else
+     flash[:error] = "Wniosek jest w obiegu"
+     redirect_to @order 
     end
   end
 

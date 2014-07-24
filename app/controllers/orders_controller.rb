@@ -22,10 +22,20 @@ class OrdersController < ApplicationController
     # => ABI
       branch = current_user.branch
       @ord = branch.orders.dane_osob.paginate(:page => params[:page], :per_page => 10).uniq 
+    elsif current_user.lokwl?
+    # => Lokalny Właściciel Danych
+      branch = current_user.branch
+      #@ord = branch.orders.upr_lok.joins(:products, :users).where(users: { id: current_user.id}).uniq,
+      @ord = branch.orders.upr_lok.select{ |x| x.products.select{|z| z.users.include?(current_user)}}.uniq
+    elsif current_user.dyrektor?
+    # => Dyrektor Oddziału
+      branch = current_user.branch
+      @ord = branch.orders.upr_glowne.paginate(:page => params[:page], :per_page => 10).uniq
     end
     # => Wnioski uzytkownika
     @orders = current_user.orders
   end
+  #Order.all.select{ |x| x.products.select{|z| z.users.include?(u)}}
 
   # GET /orders/1
   # GET /orders/1.json
@@ -100,9 +110,17 @@ class OrdersController < ApplicationController
       session[:order_id] = nil
       redirect_to @order
       flash[:success] = "Twój wniosek został przesłany do realizacji"
-    elsif @order.potwierdzony?
+    elsif @order.potwierdzony? && current_user.abi?
       @order.abi_potwierdzam
       flash[:success] = "Wniosek został potwierdzony przez ABI"
+      redirect_to @order
+    elsif current_user.lokwl? && @order.potwierdzony? || @order.abipotwierdzam?
+      @order.lok_potwierdzam
+      flash[:success] = "Wniosek został potwierdzony przez Lokalnego Właściciela Danych"
+      redirect_to @order
+    elsif current_user.dyrektor? && @order.potwierdzony?
+      @order.dyr_potwierdzam
+      flash[:success] = "Wniosek został potwierdzony przez dyrektora"
       redirect_to @order
     else
       flash[:error] = "Wniosek jest w trakcie realizacji"
@@ -132,4 +150,6 @@ class OrdersController < ApplicationController
     def order_params
       params.require(:order).permit(:status, :kordkom, :user_ids => [], :contributor_ids => [])
     end
+
+
 end

@@ -1,16 +1,25 @@
-<%- model_class = Product -%>
+
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+  <h1>Rola <%= @product.nr_roli %></h1>
 </div>
 
 <dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:nr_roli) %>:</strong></dt>
+  <dt><strong>Numer roli:</strong></dt>
   <dd><%= @product.nr_roli %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:nazwa) %>:</strong></dt>
+  <dt><strong>Nazwa:</strong></dt>
   <dd><%= @product.nazwa %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:opis) %>:</strong></dt>
+  <dt><strong>Opis:</strong></dt>
   <dd><%= @product.opis %></dd>
 </dl>
+
+<% unless @product.users.blank? %>
+  <% @product.users.each do |u| %>
+    <p>
+      <%= u.nazwa %> - 
+      <%= u.branch %>
+    </p>
+  <% end %>
+<% end %>
 
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),

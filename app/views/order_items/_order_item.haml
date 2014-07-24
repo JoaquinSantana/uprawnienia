@@ -4,6 +4,8 @@
 		= order_item.product.nr_roli
 		= order_item.product.nazwa
 		= order_item.product.opis
+		%strong DO:
+		= order_item.product.dane_osob
 
 		%h5 Obszar widzenia:
 		- unless order_item.branches.blank?
