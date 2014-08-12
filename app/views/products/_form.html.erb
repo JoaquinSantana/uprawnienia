@@ -2,10 +2,15 @@
   <%= f.input :nr_roli %>
   <%= f.input :nazwa %>
   <%= f.input :opis %>
+
+  <h4>Lokalny Właściciel Danych</h4>
   <div class="field">
     <%= collection_check_boxes(:product, :user_ids, User.all, :id, :nazwa ) %>
   </div>
-
+  <h4>Główny Odbiorca Usług:</h4>
+  <div class="field">
+    <%= collection_check_boxes(:product, :assistant_ids, User.all.gou, :id, :nazwa ) %>
+  </div>
 
   <div class="form-actions">
     <%= f.button :submit, :class => 'btn-primary' %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140723084955) do
+ActiveRecord::Schema.define(version: 20140724113900) do
 
   create_table "areas", force: true do |t|
     t.string   "nazwa"
@@ -24,6 +24,11 @@ ActiveRecord::Schema.define(version: 20140723084955) do
   create_table "areas_order_items", force: true do |t|
     t.integer "area_id"
     t.integer "order_item_id"
+  end
+
+  create_table "assistants_products", id: false, force: true do |t|
+    t.integer "user_id"
+    t.integer "product_id"
   end
 
   create_table "branches", force: true do |t|

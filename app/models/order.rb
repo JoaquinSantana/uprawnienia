@@ -3,6 +3,7 @@ class Order < ActiveRecord::Base
 	scope :nowe, -> { where(status: 1)} #Zaakceptepowane przez wnioskującego
 	scope :potw, -> { where(status: 2)} #Zaakceptowane przez Koordynator
 	scope :abii, -> { where(status: 4)} #Zaakceptowane przez ABI
+	scope :gou, -> { where(status: 8)}	#Zaakceptowane przez GOU
 	scope :dane_osob, -> { where(status: 2, dane_osobowe: true)}
 	scope :upr_lok, -> { where(uprlok: true) }
 	scope :upr_glowne, -> { where(uprlok: false) }
@@ -25,7 +26,9 @@ class Order < ActiveRecord::Base
 					 			:abipotwierdzam,	#Status wniosku potwierdzonego przez ABI
 					 			:odrzucony,				#Status wniosku odrzuconego
 					 			:lokpotwierdzam,	#Status wniosku potwierdzonego przez Lokalnego Właściciela Danych
-					 			:dyrpotwierdzam		#Status wniosku potwierdzonego przez Dyrektora
+					 			:dyrpotwierdzam,		#Status wniosku potwierdzonego przez Dyrektora
+					 			:goupotwierdzam,		#Status wniosku potwierdzonego przez GOU
+					 			:gaupotwierdzam
 					 											]
 
 
@@ -45,8 +48,20 @@ class Order < ActiveRecord::Base
 		self.lokpotwierdzam! if status == "abipotwierdzam" || status == "potwierdzony"
 	end
 
+	def self.lokpotwierdzam?
+		status == "lokpotwierdzam"
+	end
+
 	def dyr_potwierdzam
 		self.dyrpotwierdzam! if status == "abipotwierdzam" || status == "potwierdzony"
+	end
+
+	def gou_potwierdzam
+		self.goupotwierdzam! if status == "dyrpotwierdzam"
+	end
+
+	def gau_potwierdzam
+		self.gaupotwierdzam! if status == "goupotwierdzam"
 	end
 
 	def brak_zgody
@@ -70,6 +85,10 @@ class Order < ActiveRecord::Base
 			return "Potwierdzony przez LOK ADM"
 		elsif status == "dyrpotwierdzam"
 			return "Potwierdzony przez Dyrektora"
+		elsif status == "goupotwierdzam"
+			return "Potwierdzony przez GOU"
+		elsif status == "gaupotwierdzam"
+			return "Wniosek zrealizowany"
 		end
 	end
 

@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   include TheRole::User
   before_create :set_default_role
+  scope :gou, -> { where(role: 8)}
 
   acts_as_tree order: "email"
   
@@ -11,6 +12,11 @@ class User < ActiveRecord::Base
  
   has_and_belongs_to_many :orders
   has_and_belongs_to_many :products
+
+  has_and_belongs_to_many :owned_products, 
+    :class_name => "Product", 
+    :join_table => "assistants_products"
+
   has_many :subordinates, class_name: "User",
        foreign_key: "manager_id"
   
@@ -36,6 +42,14 @@ class User < ActiveRecord::Base
 
   def dyrektor?
     role == Role.with_name(:dyrektor)
+  end
+
+  def gou?
+    role == Role.with_name(:gou)
+  end
+
+  def gau?
+    role == Role.with_name(:gau)
   end
 
   def to_s

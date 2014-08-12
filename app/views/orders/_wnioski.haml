@@ -1,0 +1,25 @@
+%table.table
+  %thead
+    %tr
+      %th ID
+      %th Wnioskujący
+      %th Status
+      %th Utworzony
+      %th Modyfikacja
+
+  %tbody
+    - @ord.each do |o|
+      - if o.gaupotwierdzam?
+        %tr.statusik
+          %td= link_to o.id, o
+          %td= o.wnioskujacy
+          %td= o.sprawdz_status
+          %td= o.created_at.strftime('%Y:%m:%d')
+          %td= o.updated_at.strftime('%Y:%m:%d')
+      - else
+        %tr
+          %td= link_to o.id, o
+          %td= o.wnioskujacy
+          %td= o.sprawdz_status
+          %td= o.created_at.strftime('%Y:%m:%d')
+          %td= o.updated_at.strftime('%Y:%m:%d')

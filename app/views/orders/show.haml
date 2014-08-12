@@ -42,6 +42,10 @@
 				%strong Status:
 			.span4
 				= @order.sprawdz_status
+
+			- if @order.lokpotwierdzam?
+				.span4
+					%strong Wniosek do nadania
 			
 			- unless @order.kordkom.nil?
 				.span4
@@ -70,13 +74,14 @@
 								%td= cont.branch unless cont.branch.blank?
 					 
 			- if @order.decision && @order.decision.opinia
-				.row.decyzja			
-					.span9
-						%b
-							%p Wniosek ZAAKCEPTOWANY
+				.row#decyzja			
+					.span8
+						.well
+							%h6.pager
+								Wniosek ZAAKCEPTOWANY
 			- elsif @order.decision.present? && @order.decision.opinia == false
 				.row.decyzja-od			
-					.span9
+					.span8
 						%b
 							%p Wniosek ODRZUCONY
 
@@ -92,10 +97,15 @@
 
 				= render partial: "popraw"
 
-			- elsif ( current_user.abi? && @order.decision.nil? ) || current_user.lokwl? || current_user.dyrektor?
+			- elsif ( current_user.abi? && @order.decision.nil? ) || current_user.lokwl? || current_user.dyrektor? || current_user.gou? 
 				.well
 					= link_to 'Akceptuje', zatwierdz_order_path, method: :patch, class: 'btn btn-success btn-block'
 					= link_to "Brak zgody", order_decisions_path(@order, :decision => {:opinia => false}), :method => :post, class: 'btn btn-warning btn-block'
+			- elsif current_user.gau?
+				- if @order.decision.nil?
+					.well
+						= link_to "Uprawnienia nadane", order_decisions_path(@order, :decision => { :opinia => true }), :method => :post, class: 'btn btn-success btn-block'
+						= link_to "Brak zgody", order_decisions_path(@order, :decision => {:opinia => false}), :method => :post, class: 'btn btn-warning btn-block'
 
 = link_to 'Wszystkie wnioski', orders_path
 

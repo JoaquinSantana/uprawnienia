@@ -200,4 +200,33 @@
 					%td= o.wnioskujacy
 					%td= o.sprawdz_status
 					%td= o.created_at
-					%td= o.updated_at		
+					%td= o.updated_at	
+
+- elsif current_user.gou?
+	.page-header
+		%h2 
+			Witaj GOU - Wnioski pracowników KW SA
+	%table.table
+		%thead
+			%tr
+				%th ID
+				%th Wnioskujący
+				%th Status
+				%th Utworzony
+				%th Modyfikacja
+
+		%tbody
+			- @ord.each do |o|
+				%tr
+					%td= link_to o.id, o
+					%td= o.wnioskujacy
+					%td= o.sprawdz_status
+					%td= o.created_at
+					%td= o.updated_at			
+
+- elsif current_user.gau?
+	.page-header
+		%h2 
+			Witaj Główny Administratorze Uprawnień
+	
+	= render 'wnioski'			

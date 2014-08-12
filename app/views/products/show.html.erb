@@ -13,6 +13,7 @@
 </dl>
 
 <% unless @product.users.blank? %>
+  <h4>Lokalni Właściciele Danych</h4>
   <% @product.users.each do |u| %>
     <p>
       <%= u.nazwa %> - 
@@ -20,6 +21,18 @@
     </p>
   <% end %>
 <% end %>
+
+<% unless @product.assistants.blank? %>
+  <h4>Główni Odbiorcy Usług Roli:</h4>
+  <% @product.assistants.each do |u| %>
+    <p>
+      <%= u.nazwa %> - 
+      <%= u.branch %>
+    </p>
+  <% end %>
+<% end %>
+
+
 
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),

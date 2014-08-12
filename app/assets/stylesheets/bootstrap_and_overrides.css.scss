@@ -57,7 +57,7 @@ body {
   }
 
   #komentarz {
-    h4 {
+    h6 {
       margin-left: 50px !important;
       padding-bottom: 15px; 
     }
@@ -68,6 +68,13 @@ body {
       padding-left: 0px;
       padding-top: 0px;
       margin-top: 0px;
+    }
+  }
+
+  #decyzja {
+    .well {
+      margin-left: 65px;
+      background-color: #C8F463;
     }
   }
 }
@@ -106,4 +113,12 @@ body {
   }
   margin-left: 20px;
   width: 90%;
+}
+
+.table {
+  tbody {
+    .statusik {
+      background-color: #C8F463 !important;
+    }
+  }
 }

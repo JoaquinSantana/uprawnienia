@@ -31,6 +31,12 @@ class OrdersController < ApplicationController
     # => Dyrektor Oddziału
       branch = current_user.branch
       @ord = branch.orders.upr_glowne.paginate(:page => params[:page], :per_page => 10).uniq
+    elsif current_user.gou?
+    # => Główny Odbiorca Usług
+      @ord = Order.all.upr_glowne.select{ |x| x.products.select{|z| z.assistants.include?(current_user)}}.uniq
+    elsif current_user.gau?
+    # => Główny Administrator Uprawnień
+      @ord = Order.all
     end
     # => Wnioski uzytkownika
     @orders = current_user.orders
@@ -114,13 +120,17 @@ class OrdersController < ApplicationController
       @order.abi_potwierdzam
       flash[:success] = "Wniosek został potwierdzony przez ABI"
       redirect_to @order
-    elsif current_user.lokwl? && @order.potwierdzony? || @order.abipotwierdzam?
+    elsif current_user.lokwl? && ( @order.potwierdzony? || @order.abipotwierdzam? )
       @order.lok_potwierdzam
       flash[:success] = "Wniosek został potwierdzony przez Lokalnego Właściciela Danych"
       redirect_to @order
-    elsif current_user.dyrektor? && @order.potwierdzony?
+    elsif current_user.dyrektor? && ( @order.potwierdzony? || @order.abipotwierdzam? )
       @order.dyr_potwierdzam
       flash[:success] = "Wniosek został potwierdzony przez dyrektora"
+      redirect_to @order
+    elsif current_user.gou? && @order.dyrpotwierdzam?
+      @order.gou_potwierdzam
+      flash[:success] = "Wniosek został potwierdzony przez GOU"
       redirect_to @order
     else
       flash[:error] = "Wniosek jest w trakcie realizacji"

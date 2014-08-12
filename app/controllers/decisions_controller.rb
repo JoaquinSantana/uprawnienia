@@ -26,13 +26,14 @@ class DecisionsController < ApplicationController
   def create
 
     @order = Order.find(params[:order_id])
-    if @order.decision.nil? && ( @order.potwierdzony? || @order.abipotwierdzam? )
+    if @order.decision.nil? && ( @order.potwierdzony? || @order.abipotwierdzam? || @order.goupotwierdzam? )
       @decision = @order.build_decision(decision_params)
         if @decision.save
           if @decision.opinia == false
             @order.brak_zgody
             flash[:error] = "Wniosek został odrzucony"
           else @decision.opinia == true
+            @order.gau_potwierdzam
             flash[:success] = "Wniosek został zaakceptowany"
           end 
           redirect_to @order
